@@ -1,5 +1,5 @@
 [package]
-name = "rust_tests"
+name = "riscairo_guest_rs"
 version = "0.1.0"
 authors = []
 edition = "2021"
