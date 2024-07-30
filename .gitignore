@@ -1,1 +1,3 @@
-target
+guest_rs/target
+host_cairo/target
+host_cairo/src/guest_rs_bytecode.cairo
