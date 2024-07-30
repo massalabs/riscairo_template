@@ -5,3 +5,6 @@ This repo contains a sample library written in Rust (`guest_rs`) that exposes a 
 Run with `./build_run.sh`.
 
 This is part of the `riscairo` project (https://github.com/massalabs/riscairo).
+
+
+![alt text](overview.jpg)
