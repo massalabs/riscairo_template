@@ -4,6 +4,6 @@ This repo contains a sample library written in Rust (`guest_rs`) that exposes a 
 
 When you compile the `guest_rs`, make sure to use a tool like the provided `convert.py` to inline the ELF file into a `.cairo` source file within the `host_cairo` source.
 
-To try it on on a contract already deployed on sepolia, use `try_me.py`.
+To try it on on a contract already deployed on sepolia, use `try_me.py` (don't forget to setup your API key inside of `try_me.py`).
 
 This is part of the `riscairo` project (https://github.com/massalabs/riscairo).
