@@ -11,4 +11,4 @@ dependencies = [
 [[package]]
 name = "riscairo"
 version = "0.1.0"
-source = "git+https://github.com/massalabs/riscairo.git#e2a8c214e29143c5d9f01cc6090fac052144faa7"
+source = "git+https://github.com/massalabs/riscairo.git#fef39e02315fef7221805a4d71aeea566a0aea85"
