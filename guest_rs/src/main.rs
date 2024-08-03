@@ -8,19 +8,17 @@
 mod rv;
 
 use alloc::vec::Vec;
+use blake2::{Blake2s256, Digest};
+
+fn compute_hash(args: &[u8]) -> Vec<u8> {
+    Blake2s256::digest(args).to_vec()
+}
 
 fn add(args: &[u8]) -> Vec<u8> {
     if args.len() != 2 {
         panic!("Invalid arguments");
     }
     [args[0] + args[1]].to_vec()
-}
-
-fn sub(args: &[u8]) -> Vec<u8> {
-    if args.len() != 2 {
-        panic!("Invalid arguments");
-    }
-    [args[0] - args[1]].to_vec()
 }
 
 fn prepend_hello(args: &[u8]) -> Vec<u8> {
@@ -31,7 +29,7 @@ fn prepend_hello(args: &[u8]) -> Vec<u8> {
 }
 
 export_fn!(
+    "compute_hash" => compute_hash,
     "add" => add,
-    "sub" => sub,
     "prepend_hello" => prepend_hello
 );
