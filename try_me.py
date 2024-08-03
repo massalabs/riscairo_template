@@ -7,6 +7,7 @@ import hashlib
 async def main():
     node_url = "https://rpc.nethermind.io/sepolia-juno"
     api_key = "YOUR_API_KEY"
+    contract_addr = "0x0089a8b091280ac9e82e3954a7bd30cba6fcb1e2f63370d40567b3227073aaaa"
     headers = {
         "x-apikey": api_key
     }
@@ -15,17 +16,20 @@ async def main():
         cli = FullNodeClient(node_url=node_url, session=session)
 
         contract = await Contract.from_address(
-            address="0x0089a8b091280ac9e82e3954a7bd30cba6fcb1e2f63370d40567b3227073aaaa",
+            address=contract_addr,
             provider=cli,
         )
 
         data = "hello world!"
 
         # Call the contract function asynchronously
-        print("Computing blake2s_256('" + data + "')...")
-        result = await contract.functions["compute_hash"].call(data.encode('utf-8'))
-        print("Computed by contract:", bytes(result[0]).hex())
-        print("Computed locally:", hashlib.blake2s(data.encode('utf-8'), digest_size=32).hexdigest())
+        print("Computing blake2s_256('" + data + "') locally")
+        result = hashlib.blake2s(data.encode('utf-8'), digest_size=32).hexdigest()
+        print("Result:", result)
+        print("Computing using blake2 rust crate from cairo contract", contract_addr)
+        result = bytes((await contract.functions["compute_hash"].call(data.encode('utf-8')))[0]).hex()
+        print("Result:", result)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
