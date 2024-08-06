@@ -7,7 +7,7 @@ import hashlib
 async def main():
     node_url = "https://rpc.nethermind.io/sepolia-juno"
     api_key = "YOUR_API_KEY"
-    contract_addr = "0x0089a8b091280ac9e82e3954a7bd30cba6fcb1e2f63370d40567b3227073aaaa"
+    contract_addr = "0x013f8601dafe878f7963f1b4547fc3ed69473b2a3fbc620427d88521968ece3b"
     headers = {
         "x-apikey": api_key
     }
