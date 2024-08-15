@@ -22,27 +22,39 @@ async def main():
         
         # Call the contract functions
 
-        print("Adding two numbers using rust to demonstrate basic arithmetics:")
+        print("")
+
+        print("Simple demonstration calling a Cairo contract that uses riscairo to call functions written in Rust.")
+        print("The contract is deployed on Sepolia at address:", contract_addr)
+
+        print("")
+
+        print("Adding two numbers using Rust from Cairo to demonstrate basic arithmetics:")
         a = 12
         b = 56
         res = await contract.functions["add"].call(a, b)
         print(f" {a} + {b} = {res[0]}")
 
-        print("Prepending text using rust to demonstrate guest dynamic allocation:")
-        base_data = "world!"
+        print("")
 
+        print("Prepending text using Rust from Cairo to demonstrate guest dynamic memory allocation:")
+        base_data = "world!"
         data = bytes((await contract.functions["prepend_hello"].call(base_data.encode('utf-8')))[0]).decode("utf-8") 
         print("  'hello ' + 'world!' = '" + data + "'")
+
+        print("")
         
         print("Computing the blake2s256('" + data + "') hash:")
-        print("  Computing using the blake2 rust crate from Cairo contract:")
+        print("  Computing using the blake2 Rust crate from Cairo:")
         result = bytes((await contract.functions["compute_hash"].call(data.encode('utf-8')))[0]).hex()
         print("    Result:", result)
         print("  Computing locally:")
         result = hashlib.blake2s(data.encode('utf-8'), digest_size=32).hexdigest()
         print("    Result:", result)
 
-        print("Making the rust guest panic to demonstrate guest error handling:")
+        print("")
+
+        print("Making the Rust guest panic to demonstrate error handling:")
         a = 150
         b = 200  # sum overflows u8 and causes a guest panic
         print(f"  Trying to add {a} and {b} which overflows the expected u8 result...")
@@ -50,6 +62,8 @@ async def main():
             await contract.functions["add"].call(a, b)
         except Exception as e:
             print("    Error:", e)
+
+        print("")
 
 if __name__ == "__main__":
     asyncio.run(main())
