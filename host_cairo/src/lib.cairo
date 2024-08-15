@@ -22,7 +22,7 @@ mod RiscairoExample {
         }
 
         /// Add two numbers to demonstrate arithmetics.
-        /// Note that if the sum overflows u8, it cause sa guest panic.
+        /// Note that if the sum overflows u8, it causes a guest panic.
         fn add(self: @ContractState, x: u8, y: u8) -> u8 {
             let mut args = ArrayTrait::<u8>::new();
             args.append(x);
