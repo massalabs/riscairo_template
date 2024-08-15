@@ -18,7 +18,10 @@ fn add(args: &[u8]) -> Vec<u8> {
     if args.len() != 2 {
         panic!("Invalid arguments");
     }
-    [args[0] + args[1]].to_vec()
+    match args[0].checked_add(args[1]) {
+        Some(v) => [v].to_vec(),
+        None => panic!("The sum of the operands overflows u8"),
+    }
 }
 
 fn prepend_hello(args: &[u8]) -> Vec<u8> {

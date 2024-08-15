@@ -7,7 +7,7 @@ import hashlib
 async def main():
     node_url = "https://rpc.nethermind.io/sepolia-juno"
     api_key = "YOUR_API_KEY"
-    contract_addr = "0x013f8601dafe878f7963f1b4547fc3ed69473b2a3fbc620427d88521968ece3b"
+    contract_addr = "0x06e5eab47f50d1817a5e56d52b54a93f04bb173abd835283419bebe841d54d6c"
     headers = {
         "x-apikey": api_key
     }
@@ -19,17 +19,37 @@ async def main():
             address=contract_addr,
             provider=cli,
         )
+        
+        # Call the contract functions
 
-        data = "hello world!"
+        print("Adding two numbers using rust to demonstrate basic arithmetics:")
+        a = 12
+        b = 56
+        res = await contract.functions["add"].call(a, b)
+        print(f" {a} + {b} = {res[0]}")
 
-        # Call the contract function asynchronously
-        print("Computing blake2s_256('" + data + "') locally")
-        result = hashlib.blake2s(data.encode('utf-8'), digest_size=32).hexdigest()
-        print("Result:", result)
-        print("Computing using blake2 rust crate from cairo contract", contract_addr)
+        print("Prepending text using rust to demonstrate guest dynamic allocation:")
+        base_data = "world!"
+
+        data = bytes((await contract.functions["prepend_hello"].call(base_data.encode('utf-8')))[0]).decode("utf-8") 
+        print("  'hello ' + 'world!' = '" + data + "'")
+        
+        print("Computing the blake2s256('" + data + "') hash:")
+        print("  Computing using the blake2 rust crate from Cairo contract:")
         result = bytes((await contract.functions["compute_hash"].call(data.encode('utf-8')))[0]).hex()
-        print("Result:", result)
+        print("    Result:", result)
+        print("  Computing locally:")
+        result = hashlib.blake2s(data.encode('utf-8'), digest_size=32).hexdigest()
+        print("    Result:", result)
 
+        print("Making the rust guest panic to demonstrate guest error handling:")
+        a = 150
+        b = 200  # sum overflows u8 and causes a guest panic
+        print(f"  Trying to add {a} and {b} which overflows the expected u8 result...")
+        try:
+            await contract.functions["add"].call(a, b)
+        except Exception as e:
+            print("    Error:", e)
 
 if __name__ == "__main__":
     asyncio.run(main())
