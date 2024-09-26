@@ -6,7 +6,7 @@ edition = "2024_07"
 # See more keys and their definitions at https://docs.swmansion.com/scarb/docs/reference/manifest.html
 
 [dependencies]
-riscairo = { git = "https://github.com/massalabs/riscairo.git", branch = "update_version" }
+riscairo = { git = "https://github.com/massalabs/riscairo.git" }
 starknet = ">=2.3.0"
 
 [[target.starknet-contract]]
