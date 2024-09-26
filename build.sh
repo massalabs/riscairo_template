@@ -12,7 +12,7 @@ python3 convert.py
 echo "Compiling cairo host..."
 cd host_cairo
 scarb clean
-RUST_MIN_STACK=500000000 scarb --release build
+scarb --release build
 cd ..
 echo "Build successful."
 
