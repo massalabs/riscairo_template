@@ -1,0 +1,6 @@
+[workspace]
+members = ["xtask"]
+
+exclude = ["guest_rs"]
+
+resolver = "2"

@@ -1,4 +1,20 @@
-mod guest_rs_bytecode;
+pub(super) const SCARB_TOML: &str = r#"[package]
+name = "host_cairo"
+version = "0.1.0"
+edition = "2024_07"
+
+# See more keys and their definitions at https://docs.swmansion.com/scarb/docs/reference/manifest.html
+
+[dependencies]
+riscairo = { git = "https://github.com/massalabs/riscairo.git" }
+starknet = ">=2.3.0"
+
+[[target.starknet-contract]]
+sierra = true        # Enable Sierra codegen.
+casm = true          # Enable Casm codegen.
+"#;
+
+pub(super) const LIB_CAIRO: &str = r#"mod guest_rs_bytecode;
 
 #[starknet::interface]
 trait IRiscairoExample<TContractState> {
@@ -16,7 +32,7 @@ mod RiscairoExample {
 
     #[abi(embed_v0)]
     impl RiscairoExample of super::IRiscairoExample<ContractState> {
-        /// Compute the blake2s256 hash of the given data using the blake2 rust crate 
+        /// Compute the blake2s256 hash of the given data using the blake2 rust crate
         fn compute_hash(self: @ContractState, data: Array<u8>) -> Array<u8> {
             riscairo::riscv_call(BYTECODE.span(), @"compute_hash", @data,)
         }
@@ -37,3 +53,4 @@ mod RiscairoExample {
         }
     }
 }
+"#;
