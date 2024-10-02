@@ -57,6 +57,9 @@ $ cargo xtask
      Running `target/debug/xtask`
 Tasks:
 
+init_rs             initialize a template rust project
+init_cairo          initialize a template cairo project
+
 build               builds the whole project
 clean               cleans the whole project
 

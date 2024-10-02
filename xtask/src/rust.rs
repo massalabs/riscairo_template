@@ -1,6 +1,12 @@
-use std::env;
+use std::{
+    env,
+    fs::{self, File},
+    io::Write,
+};
 
 use crate::{run_command, CONFIG};
+
+mod constants;
 
 fn cargo() -> String {
     env::var("CARGO").unwrap_or_else(|_| "cargo".to_string())
@@ -12,4 +18,102 @@ pub fn clean() {
 
 pub fn build() {
     run_command(&cargo(), &["build", "--release"], CONFIG.rust_dir())
+}
+
+pub fn init() {
+    // if the rust directory already exists, do nothing
+    if CONFIG.rust_dir().exists() {
+        eprintln!("rust directory already exists: {:?}, skipping", CONFIG.rust_dir());
+        return;
+    }
+
+    // create rust directory
+    fs::create_dir_all(CONFIG.rust_dir()).unwrap_or_else(|e| {
+        panic!(
+            "failed to create directory: {:?} with error {}",
+            CONFIG.rust_dir(),
+            e
+        )
+    });
+
+    // create Cargo.toml
+    let cargo_toml_path = CONFIG.rust_dir().join("Cargo.toml");
+    let mut cargo_toml = File::create(cargo_toml_path.clone()).unwrap_or_else(|e| {
+        panic!(
+            "failed to create file: {:?} with error {}",
+            cargo_toml_path, e
+        )
+    });
+    cargo_toml
+        .write_all(constants::CARGO_TOML.as_bytes())
+        .unwrap_or_else(|e| {
+            panic!(
+                "failed to write to file: {:?} with error {}",
+                cargo_toml_path, e
+            )
+        });
+
+    // create .cargo/ directory
+    let cango_config_dir = CONFIG.rust_dir().join(".cargo");
+    fs::create_dir_all(cango_config_dir.clone()).unwrap_or_else(|e| {
+        panic!(
+            "failed to create directory: {:?} with error {}",
+            cango_config_dir, e
+        )
+    });
+    // create .cargo/config.toml
+    let cargo_config_toml_path = cango_config_dir.join("config.toml");
+    let mut cargo_config_toml = File::create(cargo_config_toml_path.clone()).unwrap_or_else(|e| {
+        panic!(
+            "failed to create file: {:?} with error {}",
+            cargo_config_toml_path, e
+        )
+    });
+    cargo_config_toml
+        .write_all(constants::CARGO_CONFIG_TOML.as_bytes())
+        .unwrap_or_else(|e| {
+            panic!(
+                "failed to write to file: {:?} with error {}",
+                cargo_config_toml_path, e
+            )
+        });
+
+    // create link.ld
+    let link_ld_path = CONFIG.rust_dir().join("link.ld");
+    let mut link_ld = File::create(link_ld_path.clone())
+        .unwrap_or_else(|e| panic!("failed to create file: {:?} with error {}", link_ld_path, e));
+    link_ld
+        .write_all(constants::LINK_LD.as_bytes())
+        .unwrap_or_else(|e| {
+            panic!(
+                "failed to write to file: {:?} with error {}",
+                link_ld_path, e
+            )
+        });
+
+    // create src/ directory
+    let src_dir = CONFIG.rust_dir().join("src");
+    fs::create_dir_all(src_dir.clone())
+        .unwrap_or_else(|e| panic!("failed to create directory: {:?} with error {}", src_dir, e));
+
+    // create rv.rs module
+    let rv_rs_path = src_dir.join("rv.rs");
+    let mut rv_rs = File::create(rv_rs_path.clone())
+        .unwrap_or_else(|e| panic!("failed to create file: {:?} with error {}", rv_rs_path, e));
+    rv_rs
+        .write_all(constants::MOD_RV_RS.as_bytes())
+        .unwrap_or_else(|e| panic!("failed to write to file: {:?} with error {}", rv_rs_path, e));
+
+    // create main.rs
+    let main_rs_path = src_dir.join("main.rs");
+    let mut main_rs = File::create(main_rs_path.clone())
+        .unwrap_or_else(|e| panic!("failed to create file: {:?} with error {}", main_rs_path, e));
+    main_rs
+        .write_all(constants::MOD_MAIN_RS.as_bytes())
+        .unwrap_or_else(|e| {
+            panic!(
+                "failed to write to file: {:?} with error {}",
+                main_rs_path, e
+            )
+        });
 }
