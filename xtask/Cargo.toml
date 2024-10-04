@@ -5,3 +5,12 @@ edition = "2021"
 
 [dependencies]
 lazy_static = "1.5.0"
+micropb-gen = { version = "0.1", features = [] }
+cairo-proto-build = { git = "https://github.com/reilabs/cairo-hints.git" }
+env_logger = "0.11.5"
+log = "0.4.22"
+
+# for guest_rs/Cargo.toml
+# [dependencies]
+#micropb = { version = "0.1", features = ["alloc"] }
+

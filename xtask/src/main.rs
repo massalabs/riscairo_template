@@ -10,6 +10,7 @@ type DynError = Box<dyn std::error::Error>;
 
 mod cairo;
 mod config;
+mod proto;
 mod rust;
 
 lazy_static::lazy_static! {
@@ -21,6 +22,7 @@ lazy_static::lazy_static! {
         .unwrap().into(),
         PathBuf::from("guest_rs"),
         PathBuf::from("host_cairo"),
+        PathBuf::from("proto"),
     );
 }
 
@@ -34,8 +36,11 @@ fn main() {
 fn try_main() -> Result<(), DynError> {
     let task = env::args().nth(1);
     match task.as_deref() {
+        Some("init") => todo!(),
         Some("init_rs") => rust::init(),
         Some("init_cairo") => cairo::init(),
+        Some("init_proto") => proto::init(),
+        Some("gen_interfaces") => proto::gen_interfaces(),
         Some("build") => build_all(),
         Some("clean") => clean_all(),
         Some("build_rs") => {
@@ -56,12 +61,17 @@ fn print_help() {
 
 init_rs             initializes the rust project
 init_cairo          initializes the cairo project
+init_proto          initializes the proto project for interfaces
 
+init                initializes a brand new project
 build               builds the whole project
 clean               cleans the whole project
 
+gen_interfaces      generates interfaces based on proto files
+
 build_rs            builds only the rust project
 build_cairo         builds only the cairo project
+
 clean_rs            cleans only the rust project
 clean_cairo         cleans only the cairo project
 "

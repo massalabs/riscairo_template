@@ -5,6 +5,7 @@ authors = []
 edition = "2021"
 
 [dependencies]
+micropb = { version = "0.1", features = ["alloc"] }
 blake2 = {version = "0.10", default-features = false}
 
 # Do not edit after this line
@@ -321,8 +322,12 @@ pub(super) const MOD_MAIN_RS: &str = r#"//! This is the main file of the program
 #![no_main]
 
 mod rv;
+mod interface;
 
 use alloc::vec::Vec;
+
+// Do not edit above this line
+
 use blake2::{Blake2s256, Digest};
 
 fn compute_hash(args: &[u8]) -> Vec<u8> {

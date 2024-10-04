@@ -15,6 +15,7 @@ casm = true          # Enable Casm codegen.
 "#;
 
 pub(super) const LIB_CAIRO: &str = r#"mod guest_rs_bytecode;
+mod interface;
 
 #[starknet::interface]
 trait IRiscairoExample<TContractState> {
