@@ -4,12 +4,18 @@ pub struct Config {
     _project_root: PathBuf,
     rust_dir: PathBuf,
     cairo_dir: PathBuf,
+    proto_dir: PathBuf,
     riscv_binary_path: PathBuf,
     bytecode_path: PathBuf,
 }
 
 impl Config {
-    pub fn new(project_root: PathBuf, rust_dir: PathBuf, cairo_dir: PathBuf) -> Self {
+    pub fn new(
+        project_root: PathBuf,
+        rust_dir: PathBuf,
+        cairo_dir: PathBuf,
+        proto_dir: PathBuf,
+    ) -> Self {
         Self {
             riscv_binary_path: project_root
                 .join(rust_dir.clone())
@@ -21,9 +27,10 @@ impl Config {
                 .join(cairo_dir.clone())
                 .join("src")
                 .join("guest_rs_bytecode.cairo"),
+            proto_dir: project_root.join(proto_dir),
             rust_dir: project_root.join(rust_dir),
             cairo_dir: project_root.join(cairo_dir),
-            _project_root: project_root.to_owned(),
+            _project_root: project_root,
         }
     }
 
@@ -37,6 +44,10 @@ impl Config {
 
     pub fn cairo_dir(&self) -> &Path {
         &self.cairo_dir
+    }
+
+    pub fn proto_dir(&self) -> &Path {
+        &self.proto_dir
     }
 
     pub fn riscv_binary_path(&self) -> &Path {

@@ -7,6 +7,15 @@ edition = "2021"
 name = "scarb-riscv"
 path = "src/main.rs"
 
+[dependencies]
+lazy_static = "1.5.0"
+micropb-gen = { version = "0.1", features = [] }
+#cairo-proto-build = { git = "https://github.com/reilabs/cairo-hints.git" }
+# cairo-proto-build = { path = "../../cairo-hints/cairo-proto-build" }
+cairo-proto-build = { git = "https://github.com/massalabs/cairo-hints.git", branch = "fix_default_visibility_for_struct" }
+env_logger = "0.11.5"
+log = "0.4.22"
+
 [dev-dependencies]
 sha2 = "0.10.8"
 hex-literal = "0.4.1"

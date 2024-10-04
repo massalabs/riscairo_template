@@ -6,8 +6,11 @@ use std::{
     process::Command,
 };
 
+use proto::gen_interfaces;
+
 mod cairo;
 mod config;
+mod proto;
 mod rust;
 
 use config::Config;
@@ -15,6 +18,8 @@ use config::Config;
 type DynError = Box<dyn std::error::Error>;
 
 fn main() {
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("error")).init();
+
     let cfg = Config::new(
         // get the project root, CARGO_MANIFEST_DIR is a riscv dir, so go up 1
         Path::new(&env!("CARGO_MANIFEST_DIR"))
@@ -24,6 +29,7 @@ fn main() {
             .into(),
         PathBuf::from("guest_rs"),
         PathBuf::from("."),
+        PathBuf::from("proto"),
     );
 
     if let Err(e) = try_main(&cfg) {
@@ -38,6 +44,8 @@ fn try_main(cfg: &Config) -> Result<(), DynError> {
         Some("init") => init_all(cfg),
         Some("init_rs") => rust::init(cfg),
         Some("init_cairo") => cairo::init(cfg),
+        Some("init_proto") => proto::init(cfg),
+        Some("gen_interfaces") => proto::gen_interfaces(cfg),
         Some("build") => build_all(cfg),
         Some("clean") => clean_all(cfg),
         Some("build_rs") => {
@@ -62,8 +70,11 @@ build               builds the whole project
 clean               cleans the whole project
 
 # Single task commands:
+gen_interfaces      generates interfaces based on proto files
+
 init_rs             initializes the rust project
 init_cairo          initializes the cairo project
+init_proto          initializes the proto project for interfaces
 
 build_rs            builds only the rust project (and exports the binary to cairo)
 build_cairo         builds only the cairo project
@@ -147,6 +158,9 @@ fn elf_to_bytecode(in_file_name: &Path, out_file_name: &Path) {
 fn init_all(cfg: &Config) {
     rust::init(cfg);
     cairo::init(cfg);
+    proto::init(cfg);
+    gen_interfaces(cfg);
+
 }
 
 fn clean_all(cfg: &Config) {
@@ -163,6 +177,7 @@ fn clean_all(cfg: &Config) {
 
 fn build_all(cfg: &Config) {
     clean_all(cfg);
+    gen_interfaces(cfg);
     rust::build(cfg);
     gen_bytecode(cfg);
     cairo::build(cfg);

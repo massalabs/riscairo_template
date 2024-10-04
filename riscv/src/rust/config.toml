@@ -9,4 +9,4 @@ rustflags = [
     "-C", "link-arg=--build-id=none",
     "-C", "link-arg=--no-warn-mismatch",
     "-C", "link-arg=-n",
- ]
+]

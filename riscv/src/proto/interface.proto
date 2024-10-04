@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package interface;
+
+message ComputeHashArgs {
+    bytes message = 1;
+}
+
+message ComputeHashResult {
+    bytes result = 1;
+}
+
+message AddArgs {
+    uint32 operand1 = 1;
+    uint32 operand2 = 2;
+}
+
+message AddResult {
+    uint32 result = 1;
+}
+
+message PrependHelloArgs {
+    string message = 1;
+}
+
+message PrependHelloResult {
+    string result = 1;
+}
