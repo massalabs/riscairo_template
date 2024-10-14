@@ -1,20 +1,4 @@
-pub(super) const SCARB_TOML: &str = r#"[package]
-name = "host_cairo"
-version = "0.1.0"
-edition = "2024_07"
-
-# See more keys and their definitions at https://docs.swmansion.com/scarb/docs/reference/manifest.html
-
-[dependencies]
-riscairo = { git = "https://github.com/massalabs/riscairo.git" }
-starknet = ">=2.3.0"
-
-[[target.starknet-contract]]
-sierra = true        # Enable Sierra codegen.
-casm = true          # Enable Casm codegen.
-"#;
-
-pub(super) const LIB_CAIRO: &str = r#"mod guest_rs_bytecode;
+mod guest_rs_bytecode;
 
 #[starknet::interface]
 trait IRiscairoExample<TContractState> {
@@ -53,4 +37,3 @@ mod RiscairoExample {
         }
     }
 }
-"#;

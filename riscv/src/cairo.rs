@@ -1,4 +1,8 @@
-use std::{fs::{self, File}, io::Write, process::Command};
+use std::{
+    fs::{self, File},
+    io::Write,
+    process::Command,
+};
 
 use crate::{run_command, CONFIG};
 
@@ -28,8 +32,8 @@ pub fn build() {
 }
 
 pub fn init() {
-    // if the cairo directory already exists, do nothing
-    if CONFIG.cairo_dir().exists() {
+    // if the cairo src directory already exists, do nothing
+    if CONFIG.cairo_dir().join("src").exists() {
         eprintln!(
             "cairo directory already exists: {:?}, skipping",
             CONFIG.cairo_dir()
@@ -48,17 +52,17 @@ pub fn init() {
 
     // create src/ directory
     let src_dir = CONFIG.cairo_dir().join("src");
-    fs::create_dir_all(src_dir.clone()).unwrap_or_else(|e| {
-        panic!(
-            "failed to create directory: {:?} with error {}",
-            src_dir, e
-        )
-    });
+    fs::create_dir_all(src_dir.clone())
+        .unwrap_or_else(|e| panic!("failed to create directory: {:?} with error {}", src_dir, e));
 
     // create lib.cairo
     let lib_cairo_path = src_dir.join("lib.cairo");
-    let mut lib_cairo = File::create(lib_cairo_path.clone())
-        .unwrap_or_else(|e| panic!("failed to create file: {:?} with error {}", lib_cairo_path, e));
+    let mut lib_cairo = File::create(lib_cairo_path.clone()).unwrap_or_else(|e| {
+        panic!(
+            "failed to create file: {:?} with error {}",
+            lib_cairo_path, e
+        )
+    });
     lib_cairo
         .write_all(constants::LIB_CAIRO.as_bytes())
         .unwrap_or_else(|e| {
@@ -70,8 +74,12 @@ pub fn init() {
 
     // create Scarb.toml
     let scarb_toml_path = CONFIG.cairo_dir().join("Scarb.toml");
-    let mut scarb_toml = File::create(scarb_toml_path.clone())
-        .unwrap_or_else(|e| panic!("failed to create file: {:?} with error {}", scarb_toml_path, e));
+    let mut scarb_toml = File::create(scarb_toml_path.clone()).unwrap_or_else(|e| {
+        panic!(
+            "failed to create file: {:?} with error {}",
+            scarb_toml_path, e
+        )
+    });
     scarb_toml
         .write_all(constants::SCARB_TOML.as_bytes())
         .unwrap_or_else(|e| {

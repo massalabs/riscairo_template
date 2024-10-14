@@ -23,7 +23,10 @@ pub fn build() {
 pub fn init() {
     // if the rust directory already exists, do nothing
     if CONFIG.rust_dir().exists() {
-        eprintln!("rust directory already exists: {:?}, skipping", CONFIG.rust_dir());
+        eprintln!(
+            "rust directory already exists: {:?}, skipping",
+            CONFIG.rust_dir()
+        );
         return;
     }
 

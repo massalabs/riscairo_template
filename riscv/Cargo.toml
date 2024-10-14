@@ -1,7 +1,11 @@
 [package]
-name = "xtask"
+name = "riscv"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 lazy_static = "1.5.0"
+
+[[bin]]
+name = "scarb-riscv"
+path = "src/main.rs"

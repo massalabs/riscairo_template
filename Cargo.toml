@@ -1,6 +1,7 @@
 [workspace]
-members = ["xtask"]
+members = ["riscv"]
 
+# only useful for testing purposes
 exclude = ["guest_rs"]
 
 resolver = "2"

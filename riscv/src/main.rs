@@ -14,13 +14,13 @@ mod rust;
 
 lazy_static::lazy_static! {
     static ref CONFIG: config::Config = config::Config::new(
-        // get the project root, CARGO_MANIFEST_DIR is a xtask dir, so go up 1
+        // get the project root, CARGO_MANIFEST_DIR is a riscv dir, so go up 1
         Path::new(&env!("CARGO_MANIFEST_DIR"))
         .ancestors()
         .nth(1)
         .unwrap().into(),
         PathBuf::from("guest_rs"),
-        PathBuf::from("host_cairo"),
+        PathBuf::from("."),
     );
 }
 
@@ -34,6 +34,7 @@ fn main() {
 fn try_main() -> Result<(), DynError> {
     let task = env::args().nth(1);
     match task.as_deref() {
+        Some("init") => init_all(),
         Some("init_rs") => rust::init(),
         Some("init_cairo") => cairo::init(),
         Some("build") => build_all(),
@@ -54,14 +55,18 @@ fn print_help() {
     eprintln!(
         "Tasks:
 
-init_rs             initializes the rust project
-init_cairo          initializes the cairo project
-
+# All in one commands:
+init                initializes a brand new project
 build               builds the whole project
 clean               cleans the whole project
 
+# Single task commands:
+init_rs             initializes the rust project
+init_cairo          initializes the cairo project
+
 build_rs            builds only the rust project
 build_cairo         builds only the cairo project
+
 clean_rs            cleans only the rust project
 clean_cairo         cleans only the cairo project
 "
@@ -136,6 +141,11 @@ fn elf_to_bytecode(in_file_name: &Path, out_file_name: &Path) {
     });
 
     println!("Converted\n\t{:?}\nto\n\t{:?}", in_file_name, out_file_name);
+}
+
+fn init_all() {
+    rust::init();
+    cairo::init();
 }
 
 fn clean_all() {
