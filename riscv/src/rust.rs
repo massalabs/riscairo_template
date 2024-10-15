@@ -4,7 +4,7 @@ use std::{
     io::Write,
 };
 
-use crate::{run_command, CONFIG};
+use crate::{config::Config, run_command};
 
 mod constants;
 
@@ -12,35 +12,35 @@ fn cargo() -> String {
     env::var("CARGO").unwrap_or_else(|_| "cargo".to_string())
 }
 
-pub fn clean() {
-    run_command(&cargo(), &["clean"], CONFIG.rust_dir())
+pub fn clean(cfg: &Config) {
+    run_command(&cargo(), &["clean"], cfg.rust_dir())
 }
 
-pub fn build() {
-    run_command(&cargo(), &["build", "--release"], CONFIG.rust_dir())
+pub fn build(cfg: &Config) {
+    run_command(&cargo(), &["build", "--release"], cfg.rust_dir())
 }
 
-pub fn init() {
+pub fn init(cfg: &Config) {
     // if the rust directory already exists, do nothing
-    if CONFIG.rust_dir().exists() {
+    if cfg.rust_dir().exists() {
         eprintln!(
             "rust directory already exists: {:?}, skipping",
-            CONFIG.rust_dir()
+            cfg.rust_dir()
         );
         return;
     }
 
     // create rust directory
-    fs::create_dir_all(CONFIG.rust_dir()).unwrap_or_else(|e| {
+    fs::create_dir_all(cfg.rust_dir()).unwrap_or_else(|e| {
         panic!(
             "failed to create directory: {:?} with error {}",
-            CONFIG.rust_dir(),
+            cfg.rust_dir(),
             e
         )
     });
 
     // create Cargo.toml
-    let cargo_toml_path = CONFIG.rust_dir().join("Cargo.toml");
+    let cargo_toml_path = cfg.rust_dir().join("Cargo.toml");
     let mut cargo_toml = File::create(cargo_toml_path.clone()).unwrap_or_else(|e| {
         panic!(
             "failed to create file: {:?} with error {}",
@@ -57,7 +57,7 @@ pub fn init() {
         });
 
     // create .cargo/ directory
-    let cango_config_dir = CONFIG.rust_dir().join(".cargo");
+    let cango_config_dir = cfg.rust_dir().join(".cargo");
     fs::create_dir_all(cango_config_dir.clone()).unwrap_or_else(|e| {
         panic!(
             "failed to create directory: {:?} with error {}",
@@ -82,7 +82,7 @@ pub fn init() {
         });
 
     // create link.ld
-    let link_ld_path = CONFIG.rust_dir().join("link.ld");
+    let link_ld_path = cfg.rust_dir().join("link.ld");
     let mut link_ld = File::create(link_ld_path.clone())
         .unwrap_or_else(|e| panic!("failed to create file: {:?} with error {}", link_ld_path, e));
     link_ld
@@ -95,7 +95,7 @@ pub fn init() {
         });
 
     // create src/ directory
-    let src_dir = CONFIG.rust_dir().join("src");
+    let src_dir = cfg.rust_dir().join("src");
     fs::create_dir_all(src_dir.clone())
         .unwrap_or_else(|e| panic!("failed to create directory: {:?} with error {}", src_dir, e));
 

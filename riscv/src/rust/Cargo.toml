@@ -5,7 +5,6 @@ authors = []
 edition = "2021"
 
 [dependencies]
-micropb = { version = "0.1", features = ["alloc"] }
 blake2 = {version = "0.10", default-features = false}
 
 # Do not edit after this line

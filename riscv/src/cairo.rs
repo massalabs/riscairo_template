@@ -4,7 +4,7 @@ use std::{
     process::Command,
 };
 
-use crate::{run_command, CONFIG};
+use crate::{config::Config, run_command};
 
 mod constants;
 
@@ -23,35 +23,35 @@ fn scarb() -> String {
     }
 }
 
-pub fn clean() {
-    run_command(&scarb(), &["clean"], CONFIG.cairo_dir())
+pub fn clean(cfg: &Config) {
+    run_command(&scarb(), &["clean"], cfg.cairo_dir())
 }
 
-pub fn build() {
-    run_command(&scarb(), &["--release", "build"], CONFIG.cairo_dir())
+pub fn build(cfg: &Config) {
+    run_command(&scarb(), &["--release", "build"], cfg.cairo_dir())
 }
 
-pub fn init() {
+pub fn init(cfg: &Config) {
     // if the cairo src directory already exists, do nothing
-    if CONFIG.cairo_dir().join("src").exists() {
+    if cfg.cairo_dir().join("src").exists() {
         eprintln!(
             "cairo directory already exists: {:?}, skipping",
-            CONFIG.cairo_dir()
+            cfg.cairo_dir()
         );
         return;
     }
 
     // create cairo directory
-    fs::create_dir_all(CONFIG.cairo_dir()).unwrap_or_else(|e| {
+    fs::create_dir_all(cfg.cairo_dir()).unwrap_or_else(|e| {
         panic!(
             "failed to create directory: {:?} with error {}",
-            CONFIG.cairo_dir(),
+            cfg.cairo_dir(),
             e
         )
     });
 
     // create src/ directory
-    let src_dir = CONFIG.cairo_dir().join("src");
+    let src_dir = cfg.cairo_dir().join("src");
     fs::create_dir_all(src_dir.clone())
         .unwrap_or_else(|e| panic!("failed to create directory: {:?} with error {}", src_dir, e));
 
@@ -73,7 +73,7 @@ pub fn init() {
         });
 
     // create Scarb.toml
-    let scarb_toml_path = CONFIG.cairo_dir().join("Scarb.toml");
+    let scarb_toml_path = cfg.cairo_dir().join("Scarb.toml");
     let mut scarb_toml = File::create(scarb_toml_path.clone()).unwrap_or_else(|e| {
         panic!(
             "failed to create file: {:?} with error {}",

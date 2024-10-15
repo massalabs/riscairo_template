@@ -24,13 +24,16 @@ their own build system and some linking constraints. For the sake of simplicity
 $ scarb riscv
 Tasks:
 
-init_rs             initialize a template rust project
-init_cairo          initialize a template cairo project
-
+# All in one commands:
+init                initializes a brand new project
 build               builds the whole project
 clean               cleans the whole project
 
-build_rs            builds only the rust project
+# Single task commands:
+init_rs             initializes the rust project
+init_cairo          initializes the cairo project
+
+build_rs            builds only the rust project (and exports the binary to cairo)
 build_cairo         builds only the cairo project
 
 clean_rs            cleans only the rust project

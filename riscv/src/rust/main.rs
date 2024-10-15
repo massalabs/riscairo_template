@@ -9,13 +9,14 @@ mod rv;
 // Do not edit above this line
 
 // custom alloc here
-use alloc::{format, vec::Vec};
+use alloc::vec::Vec;
 
 // Add your code below
 use blake2::{Blake2s256, Digest};
 
 fn compute_hash(args: &[u8]) -> Vec<u8> {
-    Blake2s256::digest(args).to_vec()                     }
+    Blake2s256::digest(args).to_vec()
+}
 
 fn add(args: &[u8]) -> Vec<u8> {
     if args.len() != 2 {
@@ -23,15 +24,15 @@ fn add(args: &[u8]) -> Vec<u8> {
     }
     match args[0].checked_add(args[1]) {
         Some(v) => [v].to_vec(),
-        None => panic!("The sum of the operands overflows↴ u8"),
+        None => panic!("The sum of the operands overflows u8"),
     }
 }
 
 fn prepend_hello(args: &[u8]) -> Vec<u8> {
-let mut res = Vec::new();
-res.extend_from_slice(b"hello ");
-res.extend_from_slice(args);
-res
+    let mut res = Vec::new();
+    res.extend_from_slice(b"hello ");
+    res.extend_from_slice(args);
+    res
 }
 
 // export yours functions here
