@@ -8,6 +8,8 @@ edition = "2024_07"
 [dependencies]
 riscairo = { git = "https://github.com/massalabs/riscairo.git" }
 starknet = ">=2.3.0"
+# add your dependencies here
 
 [[target.starknet-contract]]
-sierra = true        # Enable Sierra codegen.
+sierra = true # Enable Sierra codegen.
+casm = true   # Enable Casm codegen.

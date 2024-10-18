@@ -6,8 +6,12 @@
 #![no_main]
 
 mod rv;
+// Do not edit above this line
 
+// custom alloc here
 use alloc::vec::Vec;
+
+// Add your code below
 use blake2::{Blake2s256, Digest};
 
 fn compute_hash(args: &[u8]) -> Vec<u8> {
@@ -31,6 +35,7 @@ fn prepend_hello(args: &[u8]) -> Vec<u8> {
     res
 }
 
+// export yours functions here
 export_fn!(
     "compute_hash" => compute_hash,
     "add" => add,
