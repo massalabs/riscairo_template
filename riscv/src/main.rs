@@ -162,7 +162,6 @@ fn clean_all(cfg: &Config) {
 }
 
 fn build_all(cfg: &Config) {
-    clean_all(cfg);
     rust::build(cfg);
     gen_bytecode(cfg);
     cairo::build(cfg);
