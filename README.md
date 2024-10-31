@@ -25,7 +25,8 @@ $ scarb riscv
 Tasks:
 
 # All in one commands:
-init                initializes a brand new project
+init                initializes a brand new empty project
+init_template       initializes a brand new project based on a template
 build               builds the whole project
 clean               cleans the whole project
 

@@ -10,7 +10,7 @@ mod cairo;
 mod config;
 mod rust;
 
-use config::Config;
+use config::{Config, ProjectType};
 
 type DynError = Box<dyn std::error::Error>;
 
@@ -24,29 +24,34 @@ fn main() {
             .into(),
         PathBuf::from("guest_rs"),
         PathBuf::from("."),
+        ProjectType::New,
     );
 
-    if let Err(e) = try_main(&cfg) {
+    if let Err(e) = try_main(cfg) {
         eprintln!("{}", e);
         std::process::exit(-1);
     }
 }
 
-fn try_main(cfg: &Config) -> Result<(), DynError> {
+fn try_main(mut cfg: Config) -> Result<(), DynError> {
     let task = env::args().nth(1);
     match task.as_deref() {
-        Some("init") => init_all(cfg),
-        Some("init_rs") => rust::init(cfg),
-        Some("init_cairo") => cairo::init(cfg),
-        Some("build") => build_all(cfg),
-        Some("clean") => clean_all(cfg),
-        Some("build_rs") => {
-            rust::build(cfg);
-            gen_bytecode(cfg)
+        Some("init") => init_all(&cfg),
+        Some("init_template") => {
+            cfg.set_project_type(ProjectType::Template);
+            init_all(&cfg)
         }
-        Some("build_cairo") => cairo::build(cfg),
-        Some("clean_rs") => rust::clean(cfg),
-        Some("clean_cairo") => cairo::clean(cfg),
+        Some("init_rs") => rust::init(&cfg),
+        Some("init_cairo") => cairo::init(&cfg),
+        Some("build") => build_all(&cfg),
+        Some("clean") => clean_all(&cfg),
+        Some("build_rs") => {
+            rust::build(&cfg);
+            gen_bytecode(&cfg)
+        }
+        Some("build_cairo") => cairo::build(&cfg),
+        Some("clean_rs") => rust::clean(&cfg),
+        Some("clean_cairo") => cairo::clean(&cfg),
         _ => print_help(),
     }
     Ok(())
@@ -57,7 +62,8 @@ fn print_help() {
         "Tasks:
 
 # All in one commands:
-init                initializes a brand new project
+init                initializes a brand new empty project
+init_template       initializes a brand new project based on a template
 build               builds the whole project
 clean               cleans the whole project
 

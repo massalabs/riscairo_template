@@ -1,15 +1,27 @@
 use std::path::{Path, PathBuf};
 
+#[derive(Clone)]
+pub(crate) enum ProjectType {
+    Template,
+    New,
+}
+
 pub struct Config {
     _project_root: PathBuf,
     rust_dir: PathBuf,
     cairo_dir: PathBuf,
     riscv_binary_path: PathBuf,
     bytecode_path: PathBuf,
+    project_type: ProjectType,
 }
 
 impl Config {
-    pub fn new(project_root: PathBuf, rust_dir: PathBuf, cairo_dir: PathBuf) -> Self {
+    pub fn new(
+        project_root: PathBuf,
+        rust_dir: PathBuf,
+        cairo_dir: PathBuf,
+        project_type: ProjectType,
+    ) -> Self {
         Self {
             riscv_binary_path: project_root
                 .join(rust_dir.clone())
@@ -24,6 +36,7 @@ impl Config {
             rust_dir: project_root.join(rust_dir),
             cairo_dir: project_root.join(cairo_dir),
             _project_root: project_root.to_owned(),
+            project_type,
         }
     }
 
@@ -45,5 +58,13 @@ impl Config {
 
     pub fn bytecode_path(&self) -> &Path {
         &self.bytecode_path
+    }
+
+    pub fn project_type(&self) -> ProjectType {
+        self.project_type.clone()
+    }
+
+    pub(crate) fn set_project_type(&mut self, template: ProjectType) {
+        self.project_type = template;
     }
 }

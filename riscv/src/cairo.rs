@@ -4,7 +4,7 @@ use std::{
     process::Command,
 };
 
-use crate::{config::Config, run_command};
+use crate::{config::{Config, ProjectType}, run_command};
 
 mod constants;
 
@@ -63,8 +63,14 @@ pub fn init(cfg: &Config) {
             lib_cairo_path, e
         )
     });
+
+    let lib_cairo_content = match cfg.project_type() {
+        ProjectType::New => constants::LIB_CAIRO_NEW,
+        ProjectType::Template => constants::LIB_CAIRO_TEMPLATE,
+    };
+
     lib_cairo
-        .write_all(constants::LIB_CAIRO.as_bytes())
+        .write_all(lib_cairo_content.as_bytes())
         .unwrap_or_else(|e| {
             panic!(
                 "failed to write to file: {:?} with error {}",

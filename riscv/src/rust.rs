@@ -4,7 +4,10 @@ use std::{
     io::Write,
 };
 
-use crate::{config::Config, run_command};
+use crate::{
+    config::{Config, ProjectType},
+    run_command,
+};
 
 mod constants;
 
@@ -47,8 +50,17 @@ pub fn init(cfg: &Config) {
             cargo_toml_path, e
         )
     });
+
+    let (cargo_toml_content, main_rs_content) = match cfg.project_type() {
+        ProjectType::New => (constants::CARGO_TOML_NEW, constants::MOD_MAIN_RS_NEW),
+        ProjectType::Template => (
+            constants::CARGO_TOML_TEMPLATE,
+            constants::MOD_MAIN_RS_TEMPLATE,
+        ),
+    };
+
     cargo_toml
-        .write_all(constants::CARGO_TOML.as_bytes())
+        .write_all(cargo_toml_content.as_bytes())
         .unwrap_or_else(|e| {
             panic!(
                 "failed to write to file: {:?} with error {}",
@@ -112,7 +124,7 @@ pub fn init(cfg: &Config) {
     let mut main_rs = File::create(main_rs_path.clone())
         .unwrap_or_else(|e| panic!("failed to create file: {:?} with error {}", main_rs_path, e));
     main_rs
-        .write_all(constants::MOD_MAIN_RS.as_bytes())
+        .write_all(main_rs_content.as_bytes())
         .unwrap_or_else(|e| {
             panic!(
                 "failed to write to file: {:?} with error {}",
