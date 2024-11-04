@@ -16,7 +16,7 @@ mod RiscairoExample {
 
     #[abi(embed_v0)]
     impl RiscairoExample of super::IRiscairoExample<ContractState> {
-        /// Compute the blake2s256 hash of the given data using the blake2 rust crate 
+        /// Compute the blake2s256 hash of the given data using the blake2 rust crate
         fn compute_hash(self: @ContractState, data: Array<u8>) -> Array<u8> {
             riscairo::riscv_call(BYTECODE.span(), @"compute_hash", @data,)
         }

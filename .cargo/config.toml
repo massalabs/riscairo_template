@@ -1,0 +1,3 @@
+# only for testing purposes
+[alias]
+riscv = "run --package riscv --"
