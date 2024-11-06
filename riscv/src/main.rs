@@ -15,13 +15,13 @@ use config::{Config, ProjectType};
 type DynError = Box<dyn std::error::Error>;
 
 fn main() {
+    println!(
+        "Working directory: {:?}",
+        std::env::current_dir().unwrap()
+    );
+
     let cfg = Config::new(
-        // get the project root, CARGO_MANIFEST_DIR is a riscv dir, so go up 1
-        Path::new(&env!("CARGO_MANIFEST_DIR"))
-            .ancestors()
-            .nth(1)
-            .unwrap()
-            .into(),
+        std::env::current_dir().unwrap(),
         PathBuf::from("guest_rs"),
         PathBuf::from("."),
         ProjectType::New,
