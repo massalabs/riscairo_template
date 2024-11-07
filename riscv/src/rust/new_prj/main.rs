@@ -16,7 +16,7 @@ use alloc::vec::Vec;
 //     ...
 // }
 
-// export yours functions here
+// export your functions here
 export_fn!(
     //"exported_rust_fn" => fn_name,
 );
