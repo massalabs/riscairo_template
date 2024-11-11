@@ -35,7 +35,7 @@ fn prepend_hello(args: &[u8]) -> Vec<u8> {
     res
 }
 
-// export yours functions here
+// export your functions here
 export_fn!(
     "compute_hash" => compute_hash,
     "add" => add,

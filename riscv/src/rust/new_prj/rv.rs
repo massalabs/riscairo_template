@@ -118,7 +118,7 @@ fn ecall(data: &[u8], category: u32) {
     };
 }
 
-// retuns a tuple of the function name and the function arguments
+// returns a tuple of the function name and the function arguments
 fn einput() -> (&'static [u8], &'static [u8]) {
     unsafe {
         (

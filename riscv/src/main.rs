@@ -190,7 +190,7 @@ mod test {
     fn init_all_test() -> Config {
         let tmp_dir = tempdir().unwrap().into_path();
         println!("testing init_all in tmp_dir: {:?}", tmp_dir);
-        let cfg = Config::new(tmp_dir, "guest_rs".into(), ".".into());
+        let cfg = Config::new(tmp_dir, "guest_rs".into(), ".".into(), ProjectType::Template);
 
         init_all(&cfg);
         cfg
